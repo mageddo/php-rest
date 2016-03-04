@@ -45,14 +45,13 @@ if($tamanhoUrl > 0){
  */
 try{
 	if(!$url){
-		$url = "default";		
+		$url = "default";
 	}
 
 	// chamando a página correspondente
 	$path = 'controller/' . $url . '.php';
 	if(!file_exists($path)){
-		header('Content-Type: application/json; charset=utf-8');
-		die(new RetornoJson(Status::$NOT_FOUND, "A url '" .curPageURL(). "' não existe"));
+		die(new RetornoJson(Status::$NOT_FOUND, array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")));
 	}
 	// chamando arquivo respectivo
 	@require_once ($path);
@@ -90,7 +89,6 @@ function catch_error($e){
 		header('Content-Type: text/plain; charset=utf-8');
 		echo $e;
 	}else{
-		header('Content-Type: application/json; charset=utf-8');
 		file_put_contents("error.log", date("[Y/m/d H:i:s] ", time()) . $e->__toString() . "\n", FILE_APPEND);
 		die(new RetornoJson(Status::$BAD_REQUEST, $e->getMessage()));
 	}

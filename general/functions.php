@@ -140,3 +140,7 @@ function get_image_type ( $filename ) {
 	if ( !empty( $img[2] ) )
 		return image_type_to_mime_type( $img[2] );
 }
+
+function setJsonHeader(){
+	header('Content-Type: application/json; charset=utf-8');
+}
