@@ -9,6 +9,8 @@ class RetornoJson {
 	public $dados; 
 	
 	function __construct($estado, $dados){
+		http_response_code($estado);
+		header('Content-Type: application/json; charset=utf-8');
 		$this->estado = $estado;
 		$this->dados = $dados;
 	}
