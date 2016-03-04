@@ -12,6 +12,9 @@ class RetornoJson {
 	function __toString(){
 		@http_response_code($estado);
 		@header('Content-Type: application/json; charset=utf-8');
-		return json_encode($this); 
+		if(MG_DEBUG){
+			return json_encode($this->dados, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE);
+		}
+		return json_encode($this->dados); 
 	}
 }
