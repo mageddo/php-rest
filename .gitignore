@@ -1,0 +1,15 @@
+.settings/
+.project
+.buildpath
+_files/bin
+/nbproject
+*.png
+*.gif
+*.jpg
+*.JPG
+*.PNG
+*.GIF
+*.log
+config.php
+
+
