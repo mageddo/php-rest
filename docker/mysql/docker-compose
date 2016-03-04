@@ -8,10 +8,11 @@ IMAGE_NAME="$BASE_NAME:1.0"
 
 if [ "$1" == "build" ]; then
 
-	docker build --rm --tag $IMAGE_NAME . "${@:2}"
+	docker build --rm --tag $IMAGE_NAME `dirname $0` "${@:2}"
 
 elif [ "$1" == "up" ]; then
 
+	docker rm -f $BASE_NAME &> /dev/null
 	docker run --expose 3306 \
 		--hostname $BASE_NAME \
 		--name $BASE_NAME \
@@ -22,6 +23,7 @@ elif [ "$1" == "up" ]; then
 
 elif [ "$1" == "up-dev" ]; then
 
+	docker rm -f $BASE_NAME &> /dev/null
 	docker run --expose 3306 \
 		--hostname $BASE_NAME \
 		--name $BASE_NAME \
@@ -32,6 +34,14 @@ elif [ "$1" == "up-dev" ]; then
 				/var/lib/mageddo/$BASE_NAME:/var/lib/mysql \
 		$IMAGE_NAME "${@:2}"
 
+elif [ "$1" == "clear" ]; then
+
+	echo "deleting the containers..."
+	docker rm -f $BASE_NAME &> /dev/null
+
+	echo "deleting images ..."
+	docker rmi -f $IMAGE_NAME &> /dev/null
+	echo "done!"
 
 else
 	echo "informe a tarefa"
