@@ -5,7 +5,6 @@
 
 TAG=$(git describe --abbrev=0 --tags)
 CONTAINER_NAME="pedido-api"
-IMAGE_NAME="$CONTAINER_NAME:$TAG"
 IMAGE_NAME_DEV="${CONTAINER_NAME}-dev:$TAG"
 WWW="/var/www/"
 
@@ -31,7 +30,6 @@ elif [ "$1" == "clear" ]; then # delete all the images and containers generated 
 	docker rm -f $CONTAINER_NAME &> /dev/null # the output does not matter for me
 
 	echo "deleting images ..."
-	docker rmi -f $IMAGE_NAME &> /dev/null # the output does not matter for me
 	docker rmi -f $IMAGE_NAME_DEV &> /dev/null # the output does not matter for me
 	echo "done!"
 
