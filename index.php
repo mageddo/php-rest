@@ -90,6 +90,6 @@ function catch_error($e){
 		echo $e;
 	}else{
 		file_put_contents("error.log", date("[Y/m/d H:i:s] ", time()) . $e->__toString() . "\n", FILE_APPEND);
-		die(new RetornoJson(Status::$BAD_REQUEST, $e->getMessage()));
+		die(new RetornoJson(Status::$INTERAL_SERVER_ERROR, array('code' => 500, 'message' => $e->getMessage())));
 	}
 }

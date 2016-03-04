@@ -1,7 +1,7 @@
 <?php
 
 define('SYS_UPLOAD_FOLDER','images/uploads/');
-define('MG_DEBUG', true);
+define('MG_DEBUG', false);
 
 define('DB_USER', 'root');
 define('DB_PASSWORD', 'root');

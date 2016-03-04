@@ -4,4 +4,5 @@ class Status {
 	public static $BAD_REQUEST = 400;
 	public static $UNAUTHORIZED = 401;
 	public static $NOT_FOUND = 404;
+	public static $INTERAL_SERVER_ERROR = 500;
 }
