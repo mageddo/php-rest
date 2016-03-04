@@ -1,0 +1,28 @@
+#!/bin/bash
+# Substitui e flexibiliza o uso do docker-compose,
+# existem os parametros padrão mas você pode passar os adicionais que quiser
+# no futuro será criado um snippet para esse script
+
+BASE_NAME="pedido-mysql"
+IMAGE_NAME="$BASE_NAME:1.0"
+
+if [ "$1" == "build" ]; then
+
+	docker build --rm --tag $IMAGE_NAME . "${@:2}"
+
+elif [ "$1" == "up" ]; then
+
+	docker run --expose 3306 \
+		--hostname $BASE_NAME \
+		--name $BASE_NAME \
+		--detach \
+		--env \
+				"MYSQL_ROOT_PASSWORD=root" \
+		--volume \
+				/var/lib/mageddo/$BASE_NAME:/var/lib/mysql \
+		$IMAGE_NAME "${@:2}"
+
+else
+	echo "informe a tarefa"
+	exit -1
+fi
