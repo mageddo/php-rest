@@ -71,7 +71,7 @@ task 'docker-php-up' (type:Exec) {
 	def pwd = new File(".").absolutePath
 	removeContainer(PHP_CONTAINER_NAME)
 	commandLine = [
-		'docker', 'run', '-d', '--hostname', MYSQL_CONTAINER_NAME,
+		'docker', 'run', '-d', '--hostname', PHP_CONTAINER_NAME,
 		'--env', "WWW=${PHP_WWW}",
 		'--volume',
 			"${pwd}/:${PHP_WWW}",
