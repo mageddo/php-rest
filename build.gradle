@@ -1,7 +1,7 @@
 defaultTasks 'info'
 
 ext {
-	TAG = ['git', 'describe', '--abbrev=0', '--tags'].execute().text
+	TAG = getTheTag()
 	CONTAINER_NAME = "pedido-api"
 	IMAGE_NAME_DEV = "${CONTAINER_NAME}-dev:$TAG"
 	WWW = "/var/www/html"
@@ -22,8 +22,11 @@ task 'info' << {
  * roda o sistema em modo dev
  * este método já chama o build e up necessário
  */
-task 'build-dev' << {
-	//docker build --rm --tag $IMAGE_NAME_DEV -f docker/php/Dockerfile .
+task 'build-dev' (type:Exec) {
+	doFirst{
+		commandLine = ['docker', 'build', '--rm', "--tag ${IMAGE_NAME_DEV}", '-f docker/php/Dockerfile', '.']
+		
+	}
 }
 
 /**
@@ -63,4 +66,11 @@ task 'docker-mysql-up-dev' << {
  */
 task 'docker-clear' << {
 
+}
+
+def removeLast(String str) {
+	str.substring(0, str.length()-1);
+}
+def getTheTag(){
+	removeLast(['git', 'describe', '--abbrev=0', '--tags'].execute().text)
 }
