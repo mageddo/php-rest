@@ -24,7 +24,7 @@ task 'info' << {
  */
 task 'build-dev' (type:Exec) {
 	doFirst{
-		commandLine = ['docker', 'build', '--rm', "--tag ${IMAGE_NAME_DEV}", '-f docker/php/Dockerfile', '.']
+		commandLine = ['docker', 'build', '--rm', '--tag', "${IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.']
 		
 	}
 }
