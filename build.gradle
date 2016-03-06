@@ -24,14 +24,21 @@ task 'info' << {
  * roda o sistema em modo dev
  * este método já chama o build e up necessário
  */
-task 'build-dev' (type:Exec) {
+task 'build-dev' (dependsOn: [
+	'build-php', 'build-mysql',
+	'docker-mysql-up-dev', 'docker-php-up'
+	]) << {
+
 }
 
 /**
  * roda o sistema em modo test (com a base de dados do src)
  * este método já chama o build e up necessário
  */
-task 'build-test' << {
+task 'build-test' (dependsOn: [
+	'build-php', 'build-mysql',
+	'docker-mysql-up', 'docker-php-up'
+	]) << {
 
 }
 
@@ -39,7 +46,7 @@ task 'build-test' << {
  * roda o php em modo dev
  * este método já chama o build e up necessário
  */
-task 'build-php-dev' (type:Exec) {
+task 'build-php' (type:Exec) {
 	commandLine = ['docker', 'build', '--rm', '--tag',
 		"${PHP_IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.'
 	]
