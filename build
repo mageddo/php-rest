@@ -1,2 +1,0 @@
-tar -pczf _files/build.tar.gz [^_]* --exclude "images/*" --exclude "build" --add-file .htaccess
-
