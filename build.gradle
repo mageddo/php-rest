@@ -40,7 +40,9 @@ task 'build-test' << {
  * este método já chama o build e up necessário
  */
 task 'build-php-dev' (type:Exec) {
-	commandLine = ['docker', 'build', '--rm', '--tag', "${PHP_IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.']
+	commandLine = ['docker', 'build', '--rm', '--tag',
+		"${PHP_IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.'
+	]
 }
 
 /**
@@ -49,7 +51,9 @@ task 'build-php-dev' (type:Exec) {
  */
 task 'build-mysql' (type:Exec) {
 	workingDir = 'docker/mysql'
-	commandLine = ['docker', 'build', '--rm', '--tag', "${MYSQL_IMAGE_NAME}", '.']
+	commandLine = ['docker', 'build', '--rm', '--tag',
+		"${MYSQL_IMAGE_NAME}", '.'
+	]
 }
 
 
@@ -65,7 +69,7 @@ task 'docker-php-up' << {
  * dados que estão salvos no projeto
  */
 task 'docker-mysql-up' (type:Exec) {
-	removeImage(MYSQL_IMAGE_NAME)
+	removeContainer(MYSQL_CONTAINER_NAME)
 	commandLine = ['docker', 'run', '--expose', '3306',
 		'--hostname', MYSQL_CONTAINER_NAME,
 		'--name', MYSQL_CONTAINER_NAME,
@@ -80,8 +84,18 @@ task 'docker-mysql-up' (type:Exec) {
  * roda o banco de dados consumindo os 
  * dados da maquina do desenvolvedor
  */
-task 'docker-mysql-up-dev' << {
-	
+task 'docker-mysql-up-dev' (type:Exec) {
+	removeContainer(MYSQL_CONTAINER_NAME)
+	commandLine = ['docker', 'run', '--expose', '3306',
+		'--hostname', MYSQL_CONTAINER_NAME,
+		'--name', MYSQL_CONTAINER_NAME,
+		'--detach',
+		'--env',
+				'"MYSQL_ROOT_PASSWORD=root"',
+		'--volume',
+			'/var/lib/mageddo/${MYSQL_CONTAINER_NAME}:/var/lib/mysql',
+		MYSQL_IMAGE_NAME
+	]
 }
 
 /**
@@ -98,6 +112,10 @@ def removeLast(String str) {
 def getTheTag(){
 	removeLast(['git', 'describe', '--abbrev=0', '--tags'].execute().text)
 }
-def removeImage(String image){
-	['docker', 'rm', '-f', image].execute()
+def removeContainer(String image){
+	def buff = new StringBuffer();
+	def proc = ['docker', 'rm', '-f', image].execute();
+	proc.consumeProcessOutput(buff, buff)
+	proc.waitForOrKill(10000);
+	//println buff
 }
