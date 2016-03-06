@@ -60,8 +60,17 @@ task 'build-mysql' (type:Exec) {
 /**
  * roda o sistema php
  */
-task 'docker-php-up' << {
-
+task 'docker-php-up' (type:Exec) {
+	def pwd = new File(".").absolutePath
+	removeContainer(PHP_CONTAINER_NAME)
+	commandLine = [
+		'docker', 'run', '-d', '--hostname', MYSQL_CONTAINER_NAME,
+		'--env', 'WWW=${WWW}',
+		'--volume',
+			'${pwd}/:${WWW}',
+		'--link', '${MYSQL_CONTAINER_NAME}:${MYSQL_CONTAINER_NAME}',
+		'--name', PHP_CONTAINER_NAME, PHP_IMAGE_NAME_DEV
+	]
 }
 
 /**
