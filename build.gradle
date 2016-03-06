@@ -1,10 +1,14 @@
 defaultTasks 'info'
 
 ext {
-		PHP_TAG = getTheTag()
-		PHP_CONTAINER_NAME = "pedido-api"
-		PHP_IMAGE_NAME_DEV = "${PHP_CONTAINER_NAME}-dev:$PHP_TAG"
-		PHP_WWW = "/var/www/html"
+	PHP_TAG = getTheTag()
+	PHP_CONTAINER_NAME = "pedido-api"
+	PHP_IMAGE_NAME_DEV = "${PHP_CONTAINER_NAME}-dev:$PHP_TAG"
+	PHP_WWW = "/var/www/html"
+
+	MYSQL_CONTAINER_NAME = "pedido-mysql"
+	MYSQL_IMAGE_NAME = "${MYSQL_CONTAINER_NAME}:$PHP_TAG"
+
 }
 
 task 'info' << {
@@ -40,11 +44,12 @@ task 'build-php-dev' (type:Exec) {
 }
 
 /**
- * roda o mysql em modo dev
+ * roda o mysql
  * este método já chama o build e up necessário
  */
-task 'build-mysql-dev' (type:Exec) {
-	commandLine = ['docker', 'build', '--rm', '--tag', "${PHP_IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.']
+task 'build-mysql' (type:Exec) {
+	workingDir = 'docker/mysql'
+	commandLine = ['docker', 'build', '--rm', '--tag', "${MYSQL_IMAGE_NAME}", '.']
 }
 
 
@@ -59,8 +64,16 @@ task 'docker-php-up' << {
  * roda o banco de dados consumindo os 
  * dados que estão salvos no projeto
  */
-task 'docker-mysql-up' << {
-	
+task 'docker-mysql-up' (type:Exec) {
+	removeImage(MYSQL_IMAGE_NAME)
+	commandLine = ['docker', 'run', '--expose', '3306',
+		'--hostname', MYSQL_CONTAINER_NAME,
+		'--name', MYSQL_CONTAINER_NAME,
+		'--detach',
+		'--env',
+				'"MYSQL_ROOT_PASSWORD=root"',
+		MYSQL_IMAGE_NAME
+	]
 }
 
 /**
@@ -84,4 +97,7 @@ def removeLast(String str) {
 }
 def getTheTag(){
 	removeLast(['git', 'describe', '--abbrev=0', '--tags'].execute().text)
+}
+def removeImage(String image){
+	['docker', 'rm', '-f', image].execute()
 }
