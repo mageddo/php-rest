@@ -14,10 +14,12 @@ ext {
  * este método já chama o build e up necessário
  */
 task 'build-dev' << {
-	println "tag      : ${project.TAG}"
-	println "container: ${project.CONTAINER_NAME}"
-	println "image    : ${project.IMAGE_NAME_DEV}"
-	println "project  : ${project.WWW}"
+	println """
+	tag      : ${project.TAG}
+	container: ${project.CONTAINER_NAME}
+	image    : ${project.IMAGE_NAME_DEV}
+	project  : ${project.WWW}
+	"""
 	//docker build --rm --tag $IMAGE_NAME_DEV -f docker/php/Dockerfile .
 }
 
