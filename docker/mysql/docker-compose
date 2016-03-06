@@ -10,6 +10,7 @@ if [ "$1" == "build" ]; then
 
 	docker build --rm --tag $IMAGE_NAME `dirname $0` "${@:2}"
 
+# modo para testes 
 elif [ "$1" == "up" ]; then
 
 	docker rm -f $BASE_NAME &> /dev/null
@@ -21,6 +22,7 @@ elif [ "$1" == "up" ]; then
 				"MYSQL_ROOT_PASSWORD=root" \
 		$IMAGE_NAME "${@:2}"
 
+# modo para desenvolver (a base fica computador)
 elif [ "$1" == "up-dev" ]; then
 
 	docker rm -f $BASE_NAME &> /dev/null

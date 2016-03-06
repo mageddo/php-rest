@@ -1,0 +1,61 @@
+ext {
+
+	TAG = ['git', 'describe --abbrev=0 --tags'].execute().text
+	CONTAINER_NAME = "pedido-api"
+	IMAGE_NAME_DEV = "${CONTAINER_NAME}-dev:$TAG"
+	WWW = "/var/www/html"
+	
+}
+
+
+
+/**
+ * roda o sistema em modo dev
+ * este método já chama o build e up necessário
+ */
+task 'build-dev' << {
+	println "${project.TAG}"
+	println "${project.CONTAINER_NAME}"
+	println "${project.IMAGE_NAME_DEV}"
+	println "${project.WWW}"
+	//docker build --rm --tag $IMAGE_NAME_DEV -f docker/php/Dockerfile .
+}
+
+/**
+ * roda o sistema em modo test (com a base de dados do src)
+ * este método já chama o build e up necessário
+ */
+task 'build-test' << {
+
+}
+
+/**
+ * roda o sistema php
+ */
+task 'docker-php-up' << {
+
+}
+
+/**
+ * roda o banco de dados consumindo os 
+ * dados que estão salvos no projeto
+ */
+task 'docker-mysql-up' << {
+	
+}
+
+/**
+ * roda o banco de dados consumindo os 
+ * dados da maquina do desenvolvedor
+ */
+task 'docker-mysql-up-dev' << {
+	
+}
+
+/**
+ * apaga todas as imagens e containers
+ * gerados por este projeto
+ */
+task 'docker-clear' << {
+
+}

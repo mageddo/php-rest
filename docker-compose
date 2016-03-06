@@ -17,8 +17,6 @@ elif [ "$1" == "up" ]; then # generate containers and run it
 	# removing continers with the same name before run it
 	docker rm -f $CONTAINER_NAME &> /dev/null 
 
-	echo $PWD;
-
 	# running it with some options
 	docker run -d --hostname $CONTAINER_NAME \
 		--env WWW=$WWW \
