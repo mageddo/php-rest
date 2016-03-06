@@ -1,25 +1,28 @@
-ext {
+defaultTasks 'info'
 
+ext {
 	TAG = ['git', 'describe', '--abbrev=0', '--tags'].execute().text
 	CONTAINER_NAME = "pedido-api"
 	IMAGE_NAME_DEV = "${CONTAINER_NAME}-dev:$TAG"
 	WWW = "/var/www/html"
-	
+
 }
 
 
-
-/**
- * roda o sistema em modo dev
- * este método já chama o build e up necessário
- */
-task 'build-dev' << {
+task 'info' << {
 	println """
 	tag      : ${project.TAG}
 	container: ${project.CONTAINER_NAME}
 	image    : ${project.IMAGE_NAME_DEV}
 	project  : ${project.WWW}
 	"""
+}
+
+/**
+ * roda o sistema em modo dev
+ * este método já chama o build e up necessário
+ */
+task 'build-dev' << {
 	//docker build --rm --tag $IMAGE_NAME_DEV -f docker/php/Dockerfile .
 }
 
