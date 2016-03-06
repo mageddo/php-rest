@@ -85,15 +85,31 @@ task 'docker-php-up' (type:Exec) {
  * dados que estão salvos no projeto
  */
 task 'docker-mysql-up' (type:Exec) {
-	removeContainer(MYSQL_CONTAINER_NAME)
-	commandLine = ['docker', 'run', '--expose', '3306',
-		'--hostname', MYSQL_CONTAINER_NAME,
-		'--name', MYSQL_CONTAINER_NAME,
-		'--detach',
-		'--env',
+	doFirst {
+		removeContainer(MYSQL_CONTAINER_NAME)
+		commandLine = ['docker', 'run', '--expose', '3306',
+			'--hostname', MYSQL_CONTAINER_NAME,
+			'--name', MYSQL_CONTAINER_NAME,
+			'--detach',
+			'--env',
+				"MYSQL_DATABASE=${MYSQL_CONTAINER_NAME}",
+			'--env',
 				'MYSQL_ROOT_PASSWORD=root',
-		MYSQL_IMAGE_NAME
-	]
+			MYSQL_IMAGE_NAME
+		]
+	}
+	doLast {
+		println '|||||||||||||||||||||||'
+		sleep(15000);
+		def buff = new StringBuffer();
+		def p = ['docker', 'exec', MYSQL_CONTAINER_NAME, 'sh',
+			'/opt/scripts/setup-db'
+		].execute()
+		p.consumeProcessOutput(buff, buff)
+		p.waitForOrKill(10000);
+		println buff
+		println '<<<<<<<<<<<<<<<'
+	}
 }
 
 /**
@@ -107,7 +123,8 @@ task 'docker-mysql-up-dev' (type:Exec) {
 		'--name', MYSQL_CONTAINER_NAME,
 		'--detach',
 		'--env',
-				'MYSQL_ROOT_PASSWORD=root',
+			"MYSQL_DATABASE=${MYSQL_CONTAINER_NAME}",
+			'MYSQL_ROOT_PASSWORD=root',
 		'--volume',
 			"/var/lib/mageddo/${MYSQL_CONTAINER_NAME}:/var/lib/mysql",
 		MYSQL_IMAGE_NAME

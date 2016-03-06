@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "setup scripts"
+echo "==========================="
+for scp in `ls $(dirname $0)/*.sql` ;do
+
+	echo "< $scp"
+	mysql --user=root --password=$MYSQL_ROOT_PASSWORD $MYSQL_DATABASE < $scp
+
+done
+echo "==========================="
