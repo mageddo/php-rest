@@ -99,8 +99,9 @@ task 'docker-mysql-up' (type:Exec) {
 		]
 	}
 	doLast {
-		println '|||||||||||||||||||||||'
-		sleep(15000);
+		println 'aguardando banco subir'
+		println '============================'
+		sleep(10000);
 		def buff = new StringBuffer();
 		def p = ['docker', 'exec', MYSQL_CONTAINER_NAME, 'sh',
 			'/opt/scripts/setup-db'
@@ -108,7 +109,7 @@ task 'docker-mysql-up' (type:Exec) {
 		p.consumeProcessOutput(buff, buff)
 		p.waitForOrKill(10000);
 		println buff
-		println '<<<<<<<<<<<<<<<'
+		println '=========================='
 	}
 }
 
