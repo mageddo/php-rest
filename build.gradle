@@ -107,9 +107,9 @@ task 'docker-mysql-up-dev' (type:Exec) {
 		'--name', MYSQL_CONTAINER_NAME,
 		'--detach',
 		'--env',
-				'"MYSQL_ROOT_PASSWORD=root"',
+				'MYSQL_ROOT_PASSWORD=root',
 		'--volume',
-			'/var/lib/mageddo/${MYSQL_CONTAINER_NAME}:/var/lib/mysql',
+			"/var/lib/mageddo/${MYSQL_CONTAINER_NAME}:/var/lib/mysql",
 		MYSQL_IMAGE_NAME
 	]
 }
