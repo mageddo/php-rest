@@ -1,20 +1,18 @@
 defaultTasks 'info'
 
 ext {
-	TAG = getTheTag()
-	CONTAINER_NAME = "pedido-api"
-	IMAGE_NAME_DEV = "${CONTAINER_NAME}-dev:$TAG"
-	WWW = "/var/www/html"
-
+		PHP_TAG = getTheTag()
+		PHP_CONTAINER_NAME = "pedido-api"
+		PHP_IMAGE_NAME_DEV = "${PHP_CONTAINER_NAME}-dev:$PHP_TAG"
+		PHP_WWW = "/var/www/html"
 }
-
 
 task 'info' << {
 	println """
-	tag      : ${project.TAG}
-	container: ${project.CONTAINER_NAME}
-	image    : ${project.IMAGE_NAME_DEV}
-	project  : ${project.WWW}
+	tag      : ${project.PHP_TAG}
+	container: ${project.PHP_CONTAINER_NAME}
+	image    : ${project.PHP_IMAGE_NAME_DEV}
+	project  : ${project.PHP_WWW}
 	"""
 }
 
@@ -23,7 +21,6 @@ task 'info' << {
  * este método já chama o build e up necessário
  */
 task 'build-dev' (type:Exec) {
-	commandLine = ['docker', 'build', '--rm', '--tag', "${IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.']
 }
 
 /**
@@ -33,6 +30,23 @@ task 'build-dev' (type:Exec) {
 task 'build-test' << {
 
 }
+
+/**
+ * roda o php em modo dev
+ * este método já chama o build e up necessário
+ */
+task 'build-php-dev' (type:Exec) {
+	commandLine = ['docker', 'build', '--rm', '--tag', "${PHP_IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.']
+}
+
+/**
+ * roda o mysql em modo dev
+ * este método já chama o build e up necessário
+ */
+task 'build-mysql-dev' (type:Exec) {
+	commandLine = ['docker', 'build', '--rm', '--tag', "${PHP_IMAGE_NAME_DEV}", '-f', 'docker/php/Dockerfile', '.']
+}
+
 
 /**
  * roda o sistema php
