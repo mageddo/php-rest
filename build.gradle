@@ -103,7 +103,8 @@ task 'docker-mysql-up-dev' (type:Exec) {
  * gerados por este projeto
  */
 task 'docker-clear' << {
-
+	removeImage(PHP_IMAGE_NAME_DEV)
+	removeImage(MYSQL_IMAGE_NAME)
 }
 
 def removeLast(String str) {
@@ -115,6 +116,13 @@ def getTheTag(){
 def removeContainer(String image){
 	def buff = new StringBuffer();
 	def proc = ['docker', 'rm', '-f', image].execute();
+	proc.consumeProcessOutput(buff, buff)
+	proc.waitForOrKill(10000);
+	//println buff
+}
+def removeImage(String image){
+	def buff = new StringBuffer();
+	def proc = ['docker', 'rmi', '-f', image].execute();
 	proc.consumeProcessOutput(buff, buff)
 	proc.waitForOrKill(10000);
 	//println buff
