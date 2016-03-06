@@ -1,6 +1,6 @@
 ext {
 
-	TAG = ['git', 'describe --abbrev=0 --tags'].execute().text
+	TAG = ['git', 'describe', '--abbrev=0', '--tags'].execute().text
 	CONTAINER_NAME = "pedido-api"
 	IMAGE_NAME_DEV = "${CONTAINER_NAME}-dev:$TAG"
 	WWW = "/var/www/html"
@@ -14,10 +14,10 @@ ext {
  * este método já chama o build e up necessário
  */
 task 'build-dev' << {
-	println "${project.TAG}"
-	println "${project.CONTAINER_NAME}"
-	println "${project.IMAGE_NAME_DEV}"
-	println "${project.WWW}"
+	println "tag      : ${project.TAG}"
+	println "container: ${project.CONTAINER_NAME}"
+	println "image    : ${project.IMAGE_NAME_DEV}"
+	println "project  : ${project.WWW}"
 	//docker build --rm --tag $IMAGE_NAME_DEV -f docker/php/Dockerfile .
 }
 
