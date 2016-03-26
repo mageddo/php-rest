@@ -71,11 +71,10 @@ task 'docker-php-up' (type:Exec) {
 	def pwd = new File(".").absolutePath
 	removeContainer(PHP_CONTAINER_NAME)
 	commandLine = [
-		'docker', 'run', '-d', '--hostname', PHP_CONTAINER_NAME,
+		'docker', 'run', '-d', '--hostname', 'pedido-api.mageddo',
 		'--env', "WWW=${PHP_WWW}",
 		'--volume',
 			"${pwd}/:${PHP_WWW}",
-		'--link', "${MYSQL_CONTAINER_NAME}:${MYSQL_CONTAINER_NAME}",
 		'--name', PHP_CONTAINER_NAME, PHP_IMAGE_NAME_DEV
 	]
 }
@@ -88,7 +87,7 @@ task 'docker-mysql-up' (type:Exec) {
 	doFirst {
 		removeContainer(MYSQL_CONTAINER_NAME)
 		commandLine = ['docker', 'run', '--expose', '3306',
-			'--hostname', MYSQL_CONTAINER_NAME,
+			'--hostname', 'mysql.mageddo',
 			'--name', MYSQL_CONTAINER_NAME,
 			'--detach',
 			'--env',
