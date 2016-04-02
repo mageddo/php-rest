@@ -236,8 +236,10 @@ function mg_pre_curl($url, $method, $body, $headers){
 	));
 	$response = curl_exec($ch);
 	$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+	$statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);
 	return array(
+		'statusCode' => $statusCode,
 		'response' => $response,
 		'headerSize' => $headerSize
 	);
@@ -250,14 +252,12 @@ function mg_curl($url, $method, $body, $headers){
 	$index = strpos($response , "\n");
 	$headers = array();
 	$completeHeaders = substr($response, 0, $headerSize);
-	$statusCode;
+	$statusCode = $r['statusCode'];
 	$body = substr($response, $headerSize);
 	$first = true;
 	foreach (explode("\n", $completeHeaders) as $header){
 		if($header){
 			if($first){
-				preg_match("/([0-9]{3})/", $header, $matches);
-				$statusCode = $matches[0];
 				$first = false;
 			}else{
 				$headers[] = $header;
