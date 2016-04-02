@@ -5,7 +5,8 @@ class PHPApi {
 	public $not_found_callback;
 
 	function proxyAPI($url){
-		$this->$not_found_callback = function($opt){
+		$this->setUp();
+		$this->not_found_callback = function($opt){
 			$ch = curl_init();
 			curl_setopt_array($ch, array(
 				CURLOPT_RETURNTRANSFER => true,
@@ -39,7 +40,6 @@ class PHPApi {
 			}
 			echo $body;
 		};
-		$this->setUp();
 	}
 
 	function setUp(){
