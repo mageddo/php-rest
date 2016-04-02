@@ -20,3 +20,9 @@ Default Controller
 	$ curl -X GET "http://locahost"
 	$ curl -X PUT "http://locahost"
 	<h1>It works from default PHP API !!!</h1>
+
+## Runinng from docker
+
+	$ gradle build-dev
+
+That way you can access the docker container IP and use the API
