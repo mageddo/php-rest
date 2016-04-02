@@ -144,3 +144,8 @@ function get_image_type ( $filename ) {
 function setJsonHeader(){
 	header('Content-Type: application/json; charset=utf-8');
 }
+
+function getJsonBody(){
+	$inputJSON = file_get_contents('php://input');
+	return json_decode($inputJSON);
+}
