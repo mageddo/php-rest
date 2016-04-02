@@ -179,8 +179,9 @@ function resolveRequest(){
 	return $url;
 }
 function getApiVersion(){
-	$hrs = apache_request_headers();
-	return $hrs['php-api-version'] || '';
+	$hrs = getallheaders();
+	$v =  $hrs['php-api-version'];
+	return $v;
 }
 function getController($url, $method = '', $version = ''){
 	if($method){

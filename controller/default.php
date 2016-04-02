@@ -1,1 +1,1 @@
-<h1>It works from PHP API !!!</h1>
+<h1>It works from default PHP API !!!</h1>
