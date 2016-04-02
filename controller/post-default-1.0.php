@@ -1,0 +1,1 @@
+<h1>It works from post 1.0 PHP API !!!</h1>
