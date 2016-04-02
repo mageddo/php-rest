@@ -156,7 +156,7 @@ function getRequestMethod(){
 function getRequestUrl(){
 	return $_GET['cmd_url'];
 }
-function resolveUrl(){
+function resolveRequest(){
 	/**
 	 * Arquivo que será carregado
 	 */  
