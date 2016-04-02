@@ -176,10 +176,11 @@ function resolveRequest(){
 	if(!$url){
 		$url = "default";
 	}
+	return $url;
 }
 function resolveController($url){
 	// chamando a página correspondente
-	$path = 'controller/' . $url . '.php';
+	$path = __DIR__ . '/../controller/' . $url . '.php';
 	if(!file_exists($path)){
 		die(new RetornoJson(Status::$NOT_FOUND, array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")));
 	}

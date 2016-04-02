@@ -1,1 +1,1 @@
-<h1>It works from pedido-api !!!</h1>
+<h1>It works from PHP API !!!</h1>
