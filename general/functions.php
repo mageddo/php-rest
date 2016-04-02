@@ -211,6 +211,6 @@ function resolveController($url, $cb = null){
 			array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")
 		));
 	}else{
-		$cb();
+		$cb(array('request_url' => $url));
 	}
 }
