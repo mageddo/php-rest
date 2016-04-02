@@ -244,7 +244,13 @@ function mg_pre_curl($url, $method, $body, $headers){
 		'headerSize' => $headerSize
 	);
 }
-function mg_curl($url, $method, $body, $headers){
+function mg_curl_this_request($url){
+	return mg_curl(
+		$url, getRequestMethod(), file_get_contents("php://input"),
+		getallheaders()
+	);
+}
+function mg_curl($url, $method, $body = '', $headers = array()){
 	$r = mg_pre_curl($url, $method, $body, $headers);
 	$response = $r['response'];
 	$headerSize = $r['headerSize'];
