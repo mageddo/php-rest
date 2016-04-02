@@ -192,7 +192,7 @@ function getController($url, $method = '', $version = ''){
 	}
 	return sprintf("%s/%s/%s%s%s.php", __DIR__, "../controller", $method, $url, $version);
 }
-function resolveController($url){
+function resolveController($url, $cb = null){
 	// chamando a página correspondente
 	$requests = array(
 		getController($url, getRequestMethod(), getApiVersion()),
@@ -205,8 +205,12 @@ function resolveController($url){
 			return ;
 		}
 	}
-	die(new RetornoJson(
-		Status::$NOT_FOUND,
-		array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")
-	));
+	if(!$cb){
+		die(new RetornoJson(
+			Status::$NOT_FOUND,
+			array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")
+		));
+	}else{
+		$cb();
+	}
 }
