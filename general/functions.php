@@ -178,13 +178,34 @@ function resolveRequest(){
 	}
 	return $url;
 }
+function getApiVersion(){
+	$hrs = apache_request_headers();
+	return $hrs['php-api-version'] || '';
+}
+function getController($url, $method = '', $version = ''){
+	if($method){
+		$method = strtolower($method) . '-';
+	}
+	if($version){
+		$version = '-' . $version;
+	}
+	return sprintf("%s/%s/%s%s%s.php", __DIR__, "../controller", $method, $url, $version);
+}
 function resolveController($url){
 	// chamando a página correspondente
-	$path = __DIR__ . '/../controller/' . $url . '.php';
-	if(!file_exists($path)){
-		die(new RetornoJson(Status::$NOT_FOUND, array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")));
+	$requests = array(
+		getController($url, getRequestMethod(), getApiVersion()),
+		getController($url, '', getApiVersion())
+	);
+	foreach($requests as $req){
+		if(file_exists($req)){
+			// chamando arquivo respectivo
+			@require_once ($req);
+			return ;
+		}
 	}
-	// chamando arquivo respectivo
-	@require_once ($path);
-	
+	die(new RetornoJson(
+		Status::$NOT_FOUND,
+		array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")
+	));
 }
