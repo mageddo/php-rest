@@ -18,44 +18,13 @@ if(MG_DEBUG){
  */ 
 register_shutdown_function('error_handler');
 
-/**
- * Parametros da requisição
- */ 
-$_PARAM = @json_decode($_REQUEST['rsq']);
-
-/**
- * Arquivo que será carregado
- */  
-$url = $_GET['cmd_url'];
-$url_original = $url;
-
-/*
- * Tirando a barra do final caso tenha
- */
-$tamanhoUrl = strlen($url); 
-if($tamanhoUrl > 0){
-	if($url[$tamanhoUrl - 1] == '/'){
-		$url = substr($url, 0, $tamanhoUrl - 1);
-	}
-	$url = str_replace("/", "-", $url);
-}
-
 /*
  * Chamando o arquivo correspondente 
  */
 try{
-	if(!$url){
-		$url = "default";
-	}
 
-	// chamando a página correspondente
-	$path = 'controller/' . $url . '.php';
-	if(!file_exists($path)){
-		die(new RetornoJson(Status::$NOT_FOUND, array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")));
-	}
-	// chamando arquivo respectivo
-	@require_once ($path);
-	
+	resolveController(resolveRequest());
+
 	/*
 	 * Se chegar aqui então quer dizer que todo o processo ocorreu bem, logo ele gera o JSON como sucesso
 	 */

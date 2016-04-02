@@ -149,3 +149,41 @@ function getJsonBody(){
 	$inputJSON = file_get_contents('php://input');
 	return json_decode($inputJSON);
 }
+
+function getRequestMethod(){
+	return $_SERVER['REQUEST_METHOD'];
+}
+function getRequestUrl(){
+	return $_GET['cmd_url'];
+}
+function resolveUrl(){
+	/**
+	 * Arquivo que será carregado
+	 */  
+	$url = getRequestUrl();
+	$url_original = $url;
+
+	/*
+	 * Tirando a barra do final caso tenha
+	 */
+	$tamanhoUrl = strlen($url); 
+	if($tamanhoUrl > 0){
+		if($url[$tamanhoUrl - 1] == '/'){
+			$url = substr($url, 0, $tamanhoUrl - 1);
+		}
+		$url = str_replace("/", "-", $url);
+	}
+	if(!$url){
+		$url = "default";
+	}
+}
+function resolveController($url){
+	// chamando a página correspondente
+	$path = 'controller/' . $url . '.php';
+	if(!file_exists($path)){
+		die(new RetornoJson(Status::$NOT_FOUND, array('code' => 4041, 'message' => "A url '" .curPageURL(). "' não existe")));
+	}
+	// chamando arquivo respectivo
+	@require_once ($path);
+	
+}
