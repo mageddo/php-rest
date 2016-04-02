@@ -286,3 +286,18 @@ function mg_forward_request($url, $method, $body, $headers){
 	}
 	echo $body;
 }
+function mg_forward_response($r){
+	http_response_code($r['statusCode']);
+	foreach ($r['headers'] as $header) {
+		header($header);
+	}
+	echo $body;
+}
+function toJson($dados){
+	if(gettype($dados) == 'string')
+		return $dados;
+	if(MG_DEBUG){
+		return json_encode($dados, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE);
+	}
+	return json_encode($dados); 
+}

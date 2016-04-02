@@ -17,10 +17,7 @@ class RetornoJson {
 		foreach ($this->headers as $header) {
 			@header($header);
 		}
-		if(MG_DEBUG){
-			return json_encode($this->dados, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE);
-		}
-		return json_encode($this->dados); 
+		return toJson($this->dados);
 	}
 
 	static function invalidField($message){
@@ -29,5 +26,9 @@ class RetornoJson {
 
 	static function success($o){
 		die(new RetornoJson(Status::$OK, $o));
+	}
+
+	static function response($status, $data = ''){
+		die(new RetornoJson($status, $data));
 	}
 }
