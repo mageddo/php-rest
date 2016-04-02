@@ -38,7 +38,7 @@ class PHPApi {
 				}
 			}
 			echo $body;
-		}
+		};
 		$this->setUp();
 	}
 
