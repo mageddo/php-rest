@@ -30,7 +30,7 @@ $ curl -X PUT "http://locahost"
 ## Runinng from docker
 
 ```bash
-	$ gradle build-dev
+$ gradle build-dev
 ```
 
 That way you can access the docker container IP and use the API
