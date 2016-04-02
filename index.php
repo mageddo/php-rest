@@ -3,14 +3,15 @@
 class PHPApi {
 
 	public $not_found_callback;
+	public $proxy_url;
 
 	function proxyAPI($url){
-		$this->setUp();
+		$this->proxy_url = $url;
 		$this->not_found_callback = function($opt){
 			$ch = curl_init();
 			curl_setopt_array($ch, array(
 				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_URL => $url,
+				CURLOPT_URL => $this->proxy_url,
 				CURLOPT_SSL_VERIFYPEER => false,
 				CURLOPT_CUSTOMREQUEST => getRequestMethod(),
 				CURLOPT_POSTFIELDS => file_get_contents("php://input"),
@@ -40,6 +41,7 @@ class PHPApi {
 			}
 			echo $body;
 		};
+		$this->setUp();
 	}
 
 	function setUp(){
