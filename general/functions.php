@@ -190,7 +190,7 @@ function getController($url, $method = '', $version = ''){
 	if($version){
 		$version = '-' . $version;
 	}
-	return sprintf("%s/%s/%s%s%s.php", __DIR__, "../controller", $method, $url, $version);
+	return sprintf("%s/%s%s%s.php", MG_CONTROLLER_PATH, $method, $url, $version);
 }
 function resolveController($url, $cb = null){
 	// chamando a página correspondente

@@ -1,46 +1,54 @@
 <?php
-/**
- * incluindo as bibliotecas
- */
-require_once 'requires.php';
 
-/**
- * Este é o arquivo que faz todos os mapentos necessários e 
- * que chama as classes, actions e códigos respectivos á URL
- */
+class PHPApi {
 
-if(MG_DEBUG){
-	ini_set('error_reporting', E_ALL ^ E_NOTICE);
-}
+	public $not_found_callback;
 
-/**
- * registrando loggers
- */ 
-register_shutdown_function('error_handler');
+	function setUp(){
+		/**
+		 * incluindo as bibliotecas
+		 */
+		require_once 'requires.php';
 
-/*
- * Chamando o arquivo correspondente 
- */
-try{
+		/**
+		 * Este é o arquivo que faz todos os mapentos necessários e 
+		 * que chama as classes, actions e códigos respectivos á URL
+		 */
 
-	resolveController(resolveRequest());
+		if(MG_DEBUG){
+			ini_set('error_reporting', E_ALL ^ E_NOTICE);
+		}
 
-	/*
-	 * Se chegar aqui então quer dizer que todo o processo ocorreu bem, logo ele gera o JSON como sucesso
-	 */
-	global $mgResult;
-	global $mgError;
-	
-	if(isset($mgResult))
-		die(new RetornoJson(Status::$OK, $mgResult));
-	else if(isset($mgError))
-		die(new RetornoJson(Status::$BAD_REQUEST, $mgError));
+		/**
+		 * registrando loggers
+		 */ 
+		register_shutdown_function('error_handler');
 
-}catch (Exception $e){
-	/*
-	 * Nesse ponto o sistema sofreu algum erro e irá apresentar o erro no formato JSON
-	 */
-	catch_error($e);
+		/*
+		 * Chamando o arquivo correspondente 
+		 */
+		try{
+
+			resolveController(resolveRequest(), $this->not_found_callback);
+
+			/*
+			 * Se chegar aqui então quer dizer que todo o processo ocorreu bem, logo ele gera o JSON como sucesso
+			 */
+			global $mgResult;
+			global $mgError;
+			
+			if(isset($mgResult))
+				die(new RetornoJson(Status::$OK, $mgResult));
+			else if(isset($mgError))
+				die(new RetornoJson(Status::$BAD_REQUEST, $mgError));
+
+		}catch (Exception $e){
+			/*
+			 * Nesse ponto o sistema sofreu algum erro e irá apresentar o erro no formato JSON
+			 */
+			catch_error($e);
+		}
+	}
 }
 
 /**
@@ -61,4 +69,9 @@ function catch_error($e){
 		file_put_contents("error.log", date("[Y/m/d H:i:s] ", time()) . $e->__toString() . "\n", FILE_APPEND);
 		die(new RetornoJson(Status::$INTERNAL_SERVER_ERROR, array('code' => 500, 'message' => $e->getMessage())));
 	}
+}
+
+if(MG_AS_API){
+	$api = new PHPApi();
+	$api->setUp();
 }
