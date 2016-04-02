@@ -1,6 +1,22 @@
-# Introduçao
-Api do pedidos-online
+# Introduction
+Write REST APIs easily with this framework
 
-# Links úteis
-* [Como buildar o ambiente](https://bitbucket.org/mageddo/pedido-app/wiki/Buildando%20o%20pedido-api)
-* [Exemplos de como usar a api em ](https://bitbucket.org/ElvisDeFreitas/autogestor-api/src)
+# Setting up
+
+## Testing controllers
+
+Controller on specific version
+
+	$ curl -X POST "http://localhost" -H "version: 1.0"
+	<h1>It works from post 1.0 PHP API !!!</h1>
+
+Controller on specific method
+
+	$ curl -X POST "http://locahost"
+	<h1>It works from post default version PHP API !!!</h1>
+
+Default Controller 
+
+	$ curl -X GET "http://locahost"
+	$ curl -X PUT "http://locahost"
+	<h1>It works from default PHP API !!!</h1>
