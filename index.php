@@ -71,6 +71,22 @@ function catch_error($e){
 	}
 }
 
+# calling configurations
+callConfig();
+function callConfig(){
+	$configs = array(
+		getenv('MG_CONFIG_FILE'), __DIR__ . '/config.php',
+		 __DIR__ . '/config.sample.php'
+	);
+	foreach ($configs as $configFile) {
+		if(file_exists($configFile)){
+			require_once $configFile;
+			return ;
+		}
+	}
+	throw new Exception('deve existir ao menos o arquivo de configuração padrão');
+}
+
 if(MG_AS_API){
 	$api = new PHPApi();
 	$api->setUp();
