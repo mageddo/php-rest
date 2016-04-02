@@ -5,6 +5,7 @@ class PHPApi {
 	public $not_found_callback;
 	public $proxy_url;
 	public $interceptor;
+	public $interceptor_not_found;
 
 	function proxyAPI($url){
 		$this->proxy_url = $url;
@@ -39,7 +40,11 @@ class PHPApi {
 		 */
 		try{
 			if($this->interceptor){
-				resolveController($this->interceptor, function(){});
+				$req = getController($this->interceptor, '', '');
+				if(file_exists($req)){
+					// chamando arquivo respectivo
+					@require_once ($req);
+				}
 			}
 			resolveController(resolveRequest(), $this->not_found_callback);
 
