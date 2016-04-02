@@ -284,14 +284,14 @@ function mg_forward_request($url, $method, $body, $headers){
 	foreach ($r['headers'] as $header) {
 		header($header);
 	}
-	echo $body;
+	echo $r['body'];
 }
 function mg_forward_response($r){
 	http_response_code($r['statusCode']);
 	foreach ($r['headers'] as $header) {
 		header($header);
 	}
-	echo $body;
+	echo $r['body'];
 }
 function toJson($dados){
 	if(gettype($dados) == 'string')
@@ -300,4 +300,8 @@ function toJson($dados){
 		return json_encode($dados, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE);
 	}
 	return json_encode($dados); 
+}
+
+function getCurrentUrl(){
+	return getApi('/' . getRequestUrl());
 }
