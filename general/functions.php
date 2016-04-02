@@ -222,7 +222,7 @@ function mg_forward_this_request($url){
 	);
 }
 
-function mg_pre_curl($url, $method, $method, $body, $headers){
+function mg_pre_curl($url, $method, $body, $headers){
 	$ch = curl_init();
 	curl_setopt_array($ch, array(
 		CURLOPT_RETURNTRANSFER => true,
@@ -242,8 +242,8 @@ function mg_pre_curl($url, $method, $method, $body, $headers){
 		'headerSize' => $headerSize
 	);
 }
-function mg_curl($url, $method, $method, $body, $headers){
-	$r = mg_pre_curl($url, $method, $method, $body, $headers);
+function mg_curl($url, $method, $body, $headers){
+	$r = mg_pre_curl($url, $method, $body, $headers);
 	$response = $r['response'];
 	$headerSize = $r['headerSize'];
 
