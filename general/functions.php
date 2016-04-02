@@ -214,3 +214,45 @@ function resolveController($url, $cb = null){
 		$cb(array('request_url' => $url));
 	}
 }
+
+function mg_forward_this_request($url){
+	return mg_forward_request(
+		$url, getRequestMethod(), file_get_contents("php://input"),
+		getallheaders()
+	);
+}
+
+function mg_forward_request($url, $method, $body, $headers){
+	$ch = curl_init();
+	curl_setopt_array($ch, array(
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_URL => $url,
+		CURLOPT_SSL_VERIFYPEER => false,
+		CURLOPT_CUSTOMREQUEST => $method,
+		CURLOPT_POSTFIELDS => $body,
+		CURLOPT_VERBOSE => true,
+		CURLOPT_HEADER => true,
+		CURLOPT_HTTPHEADER => $headers
+	));
+	$response = curl_exec($ch);
+	$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+	curl_close($ch);
+	$index = strpos($response , "\n");
+	$headers = substr($response, $index, $headerSize - $index);
+	$completeHeaders = substr($response, 0, $headerSize);
+	$statusLine = substr($completeHeaders, 0, $index);
+	$body = substr($response, $headerSize);
+	$first = true;
+	foreach (explode("\n", $completeHeaders) as $header){
+		if($header){
+			if($first){
+				preg_match("/([0-9]{3})/", $header, $matches);
+				http_response_code($matches[0]);
+				$first = false;
+			}else{
+				header($header);
+			}
+		}
+	}
+	echo $body;
+}

@@ -8,38 +8,7 @@ class PHPApi {
 	function proxyAPI($url){
 		$this->proxy_url = $url;
 		$this->not_found_callback = function($opt){
-			$ch = curl_init();
-			curl_setopt_array($ch, array(
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_URL => $this->proxy_url,
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_CUSTOMREQUEST => getRequestMethod(),
-				CURLOPT_POSTFIELDS => file_get_contents("php://input"),
-				CURLOPT_VERBOSE => true,
-				CURLOPT_HEADER => true,
-				CURLOPT_HTTPHEADER => getallheaders()
-			));
-			$response = curl_exec($ch);
-			$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-			curl_close($ch);
-			$index = strpos($response , "\n");
-			$headers = substr($response, $index, $headerSize - $index);
-			$completeHeaders = substr($response, 0, $headerSize);
-			$statusLine = substr($completeHeaders, 0, $index);
-			$body = substr($response, $headerSize);
-			$first = true;
-			foreach (explode("\n", $completeHeaders) as $header){
-				if($header){
-					if($first){
-						preg_match("/([0-9]{3})/", $header, $matches);
-						http_response_code($matches[0]);
-						$first = false;
-					}else{
-						header($header);
-					}
-				}
-			}
-			echo $body;
+			mg_forward_this_request($this->proxy_url);
 		};
 		$this->setUp();
 	}
