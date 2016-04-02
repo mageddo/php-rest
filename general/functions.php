@@ -180,7 +180,7 @@ function resolveRequest(){
 }
 function getApiVersion(){
 	$hrs = getallheaders();
-	$v =  $hrs['php-api-version'];
+	$v =  $hrs['version'];
 	return $v;
 }
 function getController($url, $method = '', $version = ''){
