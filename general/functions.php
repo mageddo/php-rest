@@ -222,7 +222,7 @@ function mg_forward_this_request($url){
 	);
 }
 
-function mg_forward_request($url, $method, $body, $headers){
+function mg_pre_curl($url, $method, $method, $body, $headers){
 	$ch = curl_init();
 	curl_setopt_array($ch, array(
 		CURLOPT_RETURNTRANSFER => true,
@@ -237,22 +237,46 @@ function mg_forward_request($url, $method, $body, $headers){
 	$response = curl_exec($ch);
 	$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
 	curl_close($ch);
+	return array(
+		'response' => $response,
+		'headerSize' => $headerSize
+	);
+}
+function mg_curl($url, $method, $method, $body, $headers){
+	$r = mg_pre_curl($url, $method, $method, $body, $headers);
+	$response = $r['response'];
+	$headerSize = $r['headerSize'];
+
 	$index = strpos($response , "\n");
-	$headers = substr($response, $index, $headerSize - $index);
+	$headers = array();
 	$completeHeaders = substr($response, 0, $headerSize);
-	$statusLine = substr($completeHeaders, 0, $index);
+	$statusCode;
 	$body = substr($response, $headerSize);
 	$first = true;
 	foreach (explode("\n", $completeHeaders) as $header){
 		if($header){
 			if($first){
 				preg_match("/([0-9]{3})/", $header, $matches);
-				http_response_code($matches[0]);
+				$statusCode = $matches[0];
 				$first = false;
 			}else{
-				header($header);
+				$headers[] = $header;
 			}
 		}
+	}
+	return array(
+		'statusCode' => $statusCode,
+		'headers' => $headers,
+		'rawHeader' => $completeHeaders,
+		'body' => $body
+	);
+}
+
+function mg_forward_request($url, $method, $body, $headers){
+	$r = mg_curl($url, $method, $body, $headers);
+	http_response_code($r['statusCode']);
+	foreach ($r['headers'] as $header) {
+		header($header);
 	}
 	echo $body;
 }
