@@ -21,7 +21,11 @@ class RetornoJson {
 	}
 
 	static function invalidField($message){
-		die(new RetornoJson(Status::$BAD_REQUEST, array('message' => $message)));
+		self::message(Status::$BAD_REQUEST, array('message' => $message));
+	}
+
+	static function message($code, $message){
+		die(new RetornoJson($code, array('message' => $message)));
 	}
 
 	static function success($o){
