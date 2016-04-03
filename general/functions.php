@@ -215,9 +215,12 @@ function resolveController($url, $cb = null){
 	}
 }
 
-function mg_forward_this_request($url){
+function mg_forward_this_request($url, $body = -1){
+	if($body == -1){
+		$body = file_get_contents("php://input");
+	}
 	mg_forward_request(
-		$url, getRequestMethod(), file_get_contents("php://input"),
+		$url, getRequestMethod(), $body,
 		getallheaders()
 	);
 }
