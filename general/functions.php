@@ -226,6 +226,10 @@ function mg_forward_this_request($url, $body = -1){
 }
 
 function mg_pre_curl($url, $method, $body, $headers){
+	$_headers = array();
+	foreach ($headers as $key => $header) {
+		array_push($_headers, "$key: $header");
+	}
 	$ch = curl_init();
 	curl_setopt_array($ch, array(
 		CURLOPT_RETURNTRANSFER => true,
@@ -235,7 +239,7 @@ function mg_pre_curl($url, $method, $body, $headers){
 		CURLOPT_POSTFIELDS => $body,
 		CURLOPT_VERBOSE => true,
 		CURLOPT_HEADER => true,
-		CURLOPT_HTTPHEADER => $headers
+		CURLOPT_HTTPHEADER => $_headers
 	));
 	$response = curl_exec($ch);
 	$headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -281,7 +285,7 @@ function mg_curl($url, $method, $body = '', $headers = array()){
 	);
 }
 
-function mg_forward_request($url, $method, $body, $headers){
+function mg_forward_request($url, $method, $body = '', $headers = array()){
 	$r = mg_curl($url, $method, $body, $headers);
 	http_response_code($r['statusCode']);
 	foreach ($r['headers'] as $header) {
