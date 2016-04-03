@@ -5,6 +5,7 @@
  */
 define('SYS_UPLOAD_FOLDER','images/uploads/');
 define('MG_DEBUG', true);
+define('MG_TIMEZONE', 'America/Sao_Paulo');
 
 
 /*

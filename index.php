@@ -16,6 +16,12 @@ class PHPApi {
 	}
 
 	function setUp(){
+
+		/**
+		 * configurando o timezone
+		 */
+		date_default_timezone_set(MG_TIMEZONE);
+
 		/**
 		 * incluindo as bibliotecas
 		 */
