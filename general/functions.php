@@ -216,7 +216,7 @@ function resolveController($url, $cb = null){
 }
 
 function mg_forward_this_request($url){
-	return mg_forward_request(
+	mg_forward_request(
 		$url, getRequestMethod(), file_get_contents("php://input"),
 		getallheaders()
 	);
@@ -301,7 +301,10 @@ function toJson($dados){
 	}
 	return json_encode($dados); 
 }
-
+function getRequestQueryUrl(){
+	$q = $_SERVER['QUERY_STRING'];
+	return substr($q, strpos($q, '=')+1);
+}
 function getCurrentUrl(){
-	return getApi('/' . getRequestUrl());
+	return getApi('/' . getRequestQueryUrl());
 }
